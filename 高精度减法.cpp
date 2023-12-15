@@ -4,7 +4,7 @@
 using namespace std;
 
 string s1, s2;
-int a[100005], b[100005], c[100005];
+int a[10086], b[10086], c[10086];
 
 int main() {
 	
