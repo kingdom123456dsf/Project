@@ -1,15 +1,17 @@
 #include<iostream>
-#include<cstdio>
 #include<algorithm>
 
 using namespace std;
 
 typedef long long LL;
-const int N = 200010;
-LL a[2 * N], s[2 * N];
-int t,n,m;
+
+const int N = 400010;//因为要开2n
+int w[N];
+LL s[N];
+int n,m; 
 
 int main(){
+	int t;
 	scanf("%d", &t);
 	
 	while(t--)
@@ -17,27 +19,28 @@ int main(){
 		scanf("%d%d", &n, &m);
 		for(int i = 1;i <= n;i++)
 		{
-			scanf("%lld", &a[i]);
-			a[i] %= m;
-			a[i + n] = a[i] + m;
-		} 
-		sort(a + 1,a + 1 + n + n);//将整个数组排序(后面n个是加上m的数组)
+			scanf("%d", &w[i]);
+			w[i] %= m;//求余数 
+		}
+		sort(w + 1, w + n + 1);
+		for(int i = 1;i <= n;i++) w[i + n] = w[i] + m;
 		
-		for(int i = 1;i <= 2 * n;i++)
-			s[i] = s[i - 1] + a[i];
-			
-		LL res = 1e18;
-		for(int i = 1;i <= n;i++)//***注意是取长度为n的区间 
+		for(int i = 1;i <= 2 * n;i++) s[i] = s[i - 1] + w[i];//求前缀和数组
+		
+		LL ans = 1e18; 
+		for(int l = 1;l <= n;l++)
 		{
-			int l = i,r = i + n - 1;
-			int mid = l + r >> 1;
-			LL sum = ((mid - l + 1) * a[mid] - (s[mid - 1] - s[l - 1])) + 
-			((s[r] - s[mid]) - (r - mid + 1) * a[mid]);
-			res = min(res, sum);
+			int r = l + n - 1;
+			int mid = l + r >> 1;//求中位数
+			LL sum = (mid - l + 1) * (LL)w[mid] - (s[mid] - s[l - 1]) +
+			(s[r] - s[mid]) - (r - mid) * (LL)w[mid];//从mid + 1开始,因为mid到它自己的距离就是0
+			//防止爆int，强转为longlong 
+			ans = min(ans, sum);
 		}
 		
-		cout << res << endl;
+		printf("%lld\n", ans);
 	}
 	
+
 	return 0;
 }
