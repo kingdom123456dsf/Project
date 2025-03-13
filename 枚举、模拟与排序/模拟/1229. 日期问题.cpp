@@ -1,99 +1,49 @@
-#include <iostream>
-#include <cstring>
-#include <algorithm>
-#include <vector>
+#include<cstdio>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+
 using namespace std;
 
-int days[13] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}; // 默认为平年
-int w[3];
+int days[13] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};//默认平年 
 
-int main() {
-    char x;
-    int n = 0;
-    while (true) {
-        cin >> w[n];
-        n++;
-        x = getchar();
-        if (x != '/') break;
-    }
-    int a, b, c;
-    a = w[0], b = w[1], c = w[2];
+bool check(int year, int month, int day)
+{
+	if(month > 12 || month < 1) return false;
+	
+	if(day > 31 || day < 1) return false;
+	
+	if(month != 2)
+	{
+		if(day > days[month]) return false;
+	}
+	else
+	{
+		int x = year % 4 == 0 && year % 100 || year % 400 == 0;//闰年为1，平年为0 
+		if(day > days[month] + x) return false;
+	}
+	
+	return true;
+}
 
-    string aa;
-    if (a < 10) aa = "0" + to_string(a);
-    else aa = to_string(a);
-
-    string bb;
-    if (b < 10) bb = "0" + to_string(b);
-    else bb = to_string(b);
-
-    string cc;
-    if (c < 10) cc = "0" + to_string(c);
-    else cc = to_string(c);
-
-    vector<string> validDates;
-
-    for (int i = 1960; i <= 2059; i++) {
-        int year = i % 100; // 得到年份后两位
-        if (a == year) { // 年月日
-            if (b >= 1 && b <= 12) {
-                if (b == 2) {
-                    bool check = (i % 4 == 0 && i % 100 != 0) || (i % 400 == 0); // 判断闰年
-                    if (c <= days[2] + check && c > 0) {
-                        string date = to_string(i) + "-" + bb + "-" + cc;
-                        validDates.push_back(date);
-                    }
-                } else {
-                    if (c <= days[b] && c > 0) {
-                        string date = to_string(i) + "-" + bb + "-" + cc;
-                        validDates.push_back(date);
-                    }
-                }
-            }
-        }
-
-        if (c == year) {
-            if (a >= 1 && a <= 12) { // 月日年
-                if (a == 2) {
-                    bool check = (i % 4 == 0 && i % 100 != 0) || (i % 400 == 0); // 判断闰年
-                    if (b <= days[2] + check && b > 0) {
-                        string date = to_string(i) + "-" + aa + "-" + bb;
-                        validDates.push_back(date);
-                    }
-                } else {
-                    if (b <= days[a] && b > 0) {
-                        string date = to_string(i) + "-" + aa + "-" + bb;
-                        validDates.push_back(date);
-                    }
-                }
-            }
-
-            if (b >= 1 && b <= 12) { // 日月年
-                if (b == 2) {
-                    bool check = (i % 4 == 0 && i % 100 != 0) || (i % 400 == 0); // 判断闰年
-                    if (a <= days[2] + check && a > 0) {
-                        string date = to_string(i) + "-" + bb + "-" + aa;
-                        validDates.push_back(date);
-                    }
-                } else {
-                    if (a <= days[b] && a > 0) {
-                        string date = to_string(i) + "-" + bb + "-" + aa;
-                        validDates.push_back(date);
-                    }
-                }
-            }
-        }
-    }
-
-    // 对存储日期的 vector 进行排序
-    sort(validDates.begin(), validDates.end());
-    auto last = unique(validDates.begin(), validDates.end());
-    validDates.erase(last, validDates.end());
-
-    // 输出排序后的日期
-    for (const string& date : validDates) {
-        cout << date << endl;
-    }
-
-    return 0;
+int main()
+{
+	int a, b, c;
+	scanf("%d/%d/%d", &a, &b, &c);//scanf用于特殊读入 
+	
+	for(int i = 19600101; i <= 20591231; i++)
+	{
+		int year = i / 10000, month = i % 10000 / 100, day = i % 100;
+		if(check(year, month, day))
+		{
+			if((year % 100 == a && month == b && day == c) ||//年月日 
+		 	(year % 100 == c && month == a && day == b) ||//月日年 
+		 	(year % 100 == c && month == b && day == a))//日月年 
+		 	{
+		 		printf("%d-%02d-%02d\n", year, month, day);
+			}
+		}
+	}
+	
+	return 0;
 }
