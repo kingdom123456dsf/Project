@@ -1,62 +1,56 @@
 #include<iostream>
 #include<algorithm>
-#include<vector>
+#include<cstdio>
+#include<cstring>
 
 using namespace std;
 
+int T, n;
+const int N = 15;
+bool st[N];
+
 struct plane{
 	int t, d, l;//到达，盘旋，降落 
-}; 
+}p[N];
 
-const int N = 15;
-bool st[N];//表示每架飞机是否降落 
-bool flag;//代表是否可以全部降落 
-vector<plane> q;
-int T;
-int n;
-
-void dfs(int u, int last)//第几架飞机，降落时间
+bool dfs(int u, int last)
 {
-	if(u == n)
-	{
-	    flag = true;
-	    return;
-	}
+	if(u == n) return true;
 	
 	for(int i = 0; i < n; i ++ )
 	{
-		if(!st[i] && q[i].t + q[i].d >= last)
+		auto q = p[i];
+		if(!st[i] && q.t + q.d >= last)
 		{
 			st[i] = true;
 			
-			dfs(u + 1, max(last, q[i].t) + q[i].l);
+			if(dfs(u + 1, max(last, q.t) + q.l)) return true;
 			
 			st[i] = false;
 		}
 	}
-} 
+	
+	return false;
+}
 
 int main()
 {
-	cin >> T;
+	scanf("%d", &T);
 	while(T -- )
 	{
-		q.erase(q.begin(), q.end());//清空 
-		cin >> n;
+		scanf("%d", &n);
 		for(int i = 0; i < n; i ++ )
 		{
-			int a, b, c;
-			cin >> a >> b >> c;
-			q.push_back({a, b, c});
+			int t, d, l;
+			scanf("%d%d%d", &t, &d, &l);
+			p[i].t = t, p[i].d = d, p[i].l = l;
 		}
-        
-        flag = false;
-        dfs(0, 0);
-			
-		if(flag) cout << "YES" << endl;
-		else cout << "NO" << endl;
+		
+		memset(st, false, sizeof st);
+		
+		if(dfs(0, 0)) puts("YES");
+		else puts("NO");
 	}
-	
 	
 	return 0;
 }
