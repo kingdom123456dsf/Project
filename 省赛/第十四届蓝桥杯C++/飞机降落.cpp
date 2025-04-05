@@ -1,61 +1,56 @@
 #include<iostream>
-#include<vector>
+#include<algorithm>
+#include<cstdio>
+#include<cstring>
 
 using namespace std;
 
-struct plane{
-	int t, d, l;//到达，盘旋，降落时长 
-};
-
+int T, n;
 const int N = 15;
-vector<plane> q;
-bool flag;//判断是否全部安全降落
-bool st[N];//表示当前飞机是否降落 
-int x;//x架飞机 
+bool st[N];
 
-void dfs(int u, int last)//降落飞机数量, 降落时间
+struct plane{
+	int t, d, l;//到达，盘旋，降落 
+}p[N];
+
+bool dfs(int u, int last)
 {
-	if(u == x)
-	{
-		flag = true; 
-		return;
-	}
+	if(u == n) return true;
 	
-	for(int i = 0; i < x; i ++ )
+	for(int i = 0; i < n; i ++ )
 	{
-		if(!st[i] && q[i].t + q[i].d >= last)
+		auto q = p[i];
+		if(!st[i] && q.t + q.d >= last)
 		{
-			st[i] = true;//当前飞机降落
+			st[i] = true;
 			
-			dfs(u + 1, max(last, q[i].t) + q[i].l);//降落 
+			if(dfs(u + 1, max(last, q.t) + q.l)) return true;
 			
-			st[i] = false;//恢复现场 
+			st[i] = false;
 		}
 	}
-} 
+	
+	return false;
+}
 
 int main()
 {
-	 int n;
-	 cin >> n;
-	 while(n -- )
-	 {
-	 	q.erase(q.begin(), q.end());//清空容器 
-	 	cin >> x;//x架飞机 
-	 	for(int i = 0; i < x; i ++ )
-	 	{
-	 		int t, d, l;
-	 		cin >> t >> d >> l;
-	 		q.push_back({t, d, l});
+	scanf("%d", &T);
+	while(T -- )
+	{
+		scanf("%d", &n);
+		for(int i = 0; i < n; i ++ )
+		{
+			int t, d, l;
+			scanf("%d%d%d", &t, &d, &l);
+			p[i].t = t, p[i].d = d, p[i].l = l;
 		}
 		
-		flag = false;
-		dfs(0, 0);
+		memset(st, false, sizeof st);
 		
-		if(flag) cout << "YES" << endl;
-		else cout << "NO" << endl;		
-	 }
-	
+		if(dfs(0, 0)) puts("YES");
+		else puts("NO");
+	}
 	
 	return 0;
 }

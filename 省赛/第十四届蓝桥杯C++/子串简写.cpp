@@ -11,21 +11,14 @@ int main()
 	char c1, c2;
 	cin >> s >> c1 >> c2;
 	
-	int res = 0;
-	for(int i = 0; i < s.size(); i ++ )
+	long long c1num = 0, ans = 0;
+	for(int i = 0, j = k - 1; j < s.size(); i ++, j ++ )
 	{
-		if(s[i] == c1)
-		{
-			int j = i + k - 1;
-			while(j < s.size())
-			{
-				if(s[j] == c2) res ++;
-				j ++;
-			} 
-		}
+		if(s[i] == c1) c1num ++;
+		if(s[j] == c2) ans += c1num;
 	}
 	
-	cout << res << endl;
+	cout << ans << endl;
 	
 	
 	return 0;
