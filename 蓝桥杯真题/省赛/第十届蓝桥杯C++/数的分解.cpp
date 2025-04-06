@@ -17,6 +17,7 @@ bool check(int x)//ÅÐ¶ÏÊÇ·ñ°üº¬2¡¢4
 int main()
 {
 	// 1 ~ 1999
+	long long ans = 0;
     for(int i = 1; i < 2000; i ++ )
     {
         for(int j = i + 1; j < 2000; j ++ )
@@ -29,12 +30,14 @@ int main()
                 int res = a + b + c;
                 if(res == 2019)
                 {
-                    cout << a << " " << b << " " << c << endl;
+//                    cout << a << " " << b << " " << c << endl;
+                    ans ++;
                 }
             }
         }
     }
 	
+	cout << ans << endl;
 	
 	return 0;
 }

@@ -24,6 +24,7 @@ int main()
 	}
 	
 	cout << a[20190324] << endl;
+//	cout << f(20190324) << endl;  nlogn时间复杂度太高 
 
 	return 0;
 }

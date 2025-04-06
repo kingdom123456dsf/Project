@@ -15,10 +15,10 @@ int main()
 	cin >> n;
 	for(int i = 1; i <= n; i ++ ) cin >> a[i];
 	
-	LL res = 0;
+	LL res = -1e12;
 	int t = 0;
 	bool flag = false;
-	//2 ^ 17 = 131,072,故最多只有17层,完全二叉树的根节点数是2 ^ n - 1; 
+	//2 ^ 17 = 131,072,故最多只有17层,完全二叉树的结点数是2 ^ n - 1; 
 	for(int i = 1; i < 17; i ++ )
 	{
 		LL ans = 0;
@@ -28,7 +28,6 @@ int main()
 		{
 //			cout << a[j] << " ";
 			ans += a[j];
-			if(a[j] == 0) flag = true;
 		}
 //		cout << endl;
 		if(ans > res)
@@ -36,7 +35,6 @@ int main()
 			res = ans;
 			t = i;
 		}
-		if(flag) break;
 	}
 	
 	cout << t << endl;
