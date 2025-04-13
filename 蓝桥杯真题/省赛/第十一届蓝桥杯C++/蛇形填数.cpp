@@ -35,14 +35,14 @@ int main()
 		d ++;
 	}
 	
-	/*for(int i = 0; i <= 20; i ++ )
+	for(int i = 0; i <= 20; i ++ )
 	{
 		for(int j = 0; j <= 20; j ++ )
 		{
 			cout << a[i][j] << " ";
 		}
 		cout << endl;
-	}*/
+	}
 	
 	// cout << "第二行第二列是" << a[2 - 1][2 - 1] << endl;
 	// cout << "第20行第20列是" << a[20 - 1][20 - 1] << endl;
