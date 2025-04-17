@@ -1,57 +1,57 @@
 #include<iostream>
-#include<algorithm>
 #include<cstring>
+#include<algorithm>
 
 using namespace std;
 
 const int N = 6010;
-int h[N], e[N], ne[N], idx;//邻接表建图,队头,当前元素值,指针域 
-int happy[N];//高兴度 
-int f[N][2];//状态表示0/1选不选当前节点
-bool has_fa[N];//是否有父节点,相当于找根节点 
+int e[N], ne[N], h[N], idx;
+int happy[N];
+bool has_fa[N]; 
+int f[N][2];
 
-void add(int a, int b)//建图,在a后插入b 
+void add(int a, int b)
 {
-	e[idx] = b, ne[idx] = h[a], h[a] = idx ++;
+	e[idx] = b, ne[idx] = h[a], h[a] = idx ++; 
 }
 
 void dfs(int u)
 {
-	f[u][1] = happy[u];//当前选
+	f[u][1] = happy[u];//当前根选
 	
-	for(int i = h[u]; i != -1; i = ne[i])//遍历子节点 
+ 	//遍历子树
+	for(int i = h[u]; i != -1; i = ne[i])//指针 
 	{
-		int j = e[i];
-		dfs(j);//回溯
+	 	int j = e[i];//结点
+		dfs(j);
 		
-		f[u][1] += f[j][0];//根节点选，子节点不可选
-		f[u][0] += max(f[j][0], f[j][1]); 
-	} 
-} 
+		f[u][1] += f[j][0]; 
+		f[u][0] += max(f[j][1], f[j][0]);
+  	} 
+}
 
 int main()
 {
 	int n;
 	cin >> n;
+	for(int i = 1; i <= n ; i ++ ) cin >> happy[i];
 	
-	for(int i = 1; i <= n; i ++ ) cin >> happy[i];
+	memset(h, -1, sizeof h);
 	
-	memset(h, -1, sizeof h);//将队头初始化
- 	
- 	for(int i = 1; i <= n - 1; i ++ )
- 	{
- 		int a, b;
- 		cin >> a >> b;//根、父
-		add(b, a);//b是父节点 
-		has_fa[a] = true;//a有父节点了 
+	for(int i = 1; i <= n - 1; i ++ )
+	{
+		int a, b;
+		cin >> a >> b;
+		add(b, a);
+		has_fa[a] = true;
 	}
 	
-	int root = 1;//找到根节点
-	while(has_fa[root]) root ++;
+	int root = 1;
+	while(has_fa[root]) root ++;//找到根节点 
 	
-	dfs(root);//从根节点开始递归
+	dfs(root);
 	
-	cout << max(f[root][0], f[root][1]);//根节点选或不选 
+	cout << max(f[root][0], f[root][1]);
 	
 	return 0;
 }
