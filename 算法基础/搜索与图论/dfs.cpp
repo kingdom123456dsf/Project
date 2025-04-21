@@ -1,65 +1,30 @@
 #include<iostream>
-#include<cstring>
-#include<queue>
-#include<unordered_map>
 
 using namespace std;
 
-int dx[4] = {-1, 0, 1, 0}, dy[4] = {0, 1, 0, -1};
+int mem[20];
 
-int bfs(string start)
+int dfs(int x)
 {
-	queue<string> q;
-	q.push(start);
+	if(mem[x]) return mem[x];
 	
-	unordered_map<string, int> d;
-	d[start] = 0;//起点
-	
-	string end = "12345678x";
-	
-	while(q.size())
-	{
-		auto t = q.front(); q.pop();
-		int distance = d[t];
-		if(t == end) return distance;
-		
-		int whe = t.find('x');
-		int x = whe / 3, y = whe % 3;
-		for(int i = 0; i < 4; i ++ )
-		{
-			int a = x + dx[i], b = y + dy[i];
-			if(a >= 0 && a < 3 && b >= 0 && b < 3)
-			{
-				swap(t[whe], t[a * 3 + b]);
-				
-				if(!d.count(t))
-				{
-					d[t] = distance + 1;
-					q.push(t);
-				}
-				
-				swap(t[whe], t[a * 3 + b]);
-			}
-		}
-	} 
-	
-	return -1;
+	int sum = 0;
+	if(x == 1) sum = 1;
+	else if(x == 2) sum = 2;
+	else if(x == 3) sum = 4;//1+1+1;1+2;2+1;3
+ 	else sum = dfs(x - 3) + dfs(x - 2) + dfs(x - 1);
+ 	
+ 	mem[x] = sum;
+ 	return sum;
 }
+//4可以由1,2,3走来 
 
 int main()
 {
-	string start;
-	for(int i = 0; i < 3; i ++ )
-	{
-		for(int j = 0; j < 3; j ++ )
-		{
-			char c;
-			cin >> c;
-			start += c;
-		}
-	}
+	int n;
+	cin >> n;
 	
-	cout << bfs(start);	
-	
+	cout << dfs(n);
+		
 	return 0;
 }
