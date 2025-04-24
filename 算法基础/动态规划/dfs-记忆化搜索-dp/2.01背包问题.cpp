@@ -1,40 +1,39 @@
 #include<iostream>
-#include<cstring>
+#include<algorithm>
 
 using namespace std;
 
-const int N = 10010;
-int v[N], w[N], mem[N][N], f[N];
-int n, maxv;
+const int N = 1010;
+int v[N], w[N], mem[N][N];//体积，价值 
+int f[N][N];
+int n, m;//物品数量、背包容积
 
-int dfs(int u, int spV)//第几个物品，剩余可选体积 
+int dfs(int u, int spV)//第几个物品，剩余体积 
 {
 	if(mem[u][spV]) return mem[u][spV];
 	
 	if(u > n) mem[u][spV] = 0;
-	else if(spV < v[u]) mem[u][spV] = dfs(u + 1, spV);//因为剩余体积不够选
-	else if(spV >= v[u]) mem[u][spV] = max(dfs(u + 1, spV - v[u]) + w[u], dfs(u + 1, spV));//也分选和不选两种情况
+	else if(spV - v[u] >= 0) mem[u][spV] = max(dfs(u + 1, spV - v[u]) + w[u], dfs(u + 1, spV));//选或不选
+	else if(spV - v[u] < 0) mem[u][spV] = dfs(u + 1, spV);//不选 
 	
-	return mem[u][spV]; 
+	return mem[u][spV];
 }
 
 int main()
 {
-	cin >> n >> maxv;
-	for(int i = 1; i <= n; i ++ )
-	{
-		cin >> v[i] >> w[i];
-	}
+	cin >> n >> m;
+	for(int i = 1; i <= n; i ++ ) cin >> v[i] >> w[i];
 	
 	for(int i = 1; i <= n; i ++ )
 	{
-		for(int j = maxv; j >= 0; j -- )
+		for(int j = 0; j <= m; j ++)
 		{
-			if(j < v[i]) f[j] = f[j];
-			else f[j] = max(f[j], f[j - v[i]] + w[i]);
+			if(j - v[i] < 0 ) f[i][j] = f[i - 1][j]; 
+			else f[i][j] = max(f[i - 1][j], f[i - 1][j - v[i]] + w[i]);
 		}
 	}
-	cout << f[maxv]; 	
+	
+	cout << f[n][m] << endl;
 	
 	return 0;
-}
+} 
