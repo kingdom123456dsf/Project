@@ -1,44 +1,53 @@
 #include<iostream>
-#include<cstring> 
+#include<queue>
+#include<cstring>
 
 using namespace std;
 
 const int N = 210;
-int g[N], mem[N];
+int g[N];
 int n, a, b;
-int res = 1e9;
+int d[N];
 
-void dfs(int u, int step)
+int bfs()
 {
-	mem[u] = step;//记录走到当前层数的步数，若是以更多步数到达当前层，则代表不能走到目标层 
+	queue<int> q;
+	q.push(a);
 	
-	if(u == b)
+	memset(d, -1, sizeof d);
+	d[a] = 0;//起点
+	
+	while(q.size())
 	{
-		res = min(res, step);
-	}
+		auto t = q.front(); q.pop();
+		
+		if(t == b) return d[t];
+		
+		if(t + g[t] <= n && d[t + g[t]] < 0)
+		{
+			int x = t + g[t];
+			d[x] = d[t] + 1;
+			q.push(x);
+		}
+		
+		if(t - g[t] >= 1 && d[t - g[t]] < 0)
+		{
+			int x = t - g[t];
+			d[x] = d[t] + 1;
+			q.push(x);
+		}
+	} 
 	
-	if(u - g[u] >= 1 && step + 1 < mem[u - g[u]])
-	{
-		dfs(u - g[u], step + 1);
-	}
-	
-	if(u + g[u] <= n && step + 1 < mem[u + g[u]])
-	{
-		dfs(u + g[u], step + 1);
-	}
-	
+	return -1;	
 }
 
 int main()
 {
 	cin >> n >> a >> b;
+	
 	for(int i = 1; i <= n; i ++ ) cin >> g[i];
 	
-	memset(mem, 0x3f, sizeof mem);
-	dfs(a, 0);
-	
-	if(res == 1e9) cout << -1 << endl;
-	else cout << res << endl;
+	cout << bfs() << endl;
 	
 	return 0;
 }
