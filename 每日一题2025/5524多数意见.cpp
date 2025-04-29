@@ -23,7 +23,8 @@ int main()
 		if(n == 2)
 		{
 			if(h[0] == h[1]) cout << h[0] << endl;
-			else cout << "-1" << endl;
+			else cout << "-1" ;
+			puts(" ");
 			continue;
 		} 
 		for(int i = 2; i < n; i++)
@@ -53,9 +54,13 @@ int main()
     		
 			for(auto a : res)
 				cout << a << " " ;
-			cout << endl;
+			puts(" ");
 		}
-		else cout << "-1" << endl;
+		else
+		{
+			cout << "-1" ;
+			puts(" ");
+		}
 	}
 	
 	return 0;
