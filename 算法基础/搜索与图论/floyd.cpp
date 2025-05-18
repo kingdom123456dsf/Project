@@ -1,46 +1,56 @@
 #include<iostream>
+#include<cstring>
 #include<algorithm>
-#include<cmath>
 
 using namespace std;
 
-const int N = 2210, INF = 1e9;
-int f[N][N];
-int n;
+const int N = 210, M = 20010;
+int d[N][N];
+int n, m, k;
 
 void floyd()
 {
 	for(int k = 1; k <= n; k ++ )
+	{
 		for(int i = 1; i <= n; i ++ )
+		{
 			for(int j = 1; j <= n; j ++ )
-				f[i][j] = min(f[i][j], f[i][k] + f[k][j]);			
+			{
+				d[i][j] = min(d[i][j], d[i][k] + d[k][j]);
+			}
+		}
+	}
 }
 
 int main()
 {
-	n = 2022;
+	cin >> n >> m >> k;
 	
 	for(int i = 1; i <= n; i ++ )
 	{
 		for(int j = 1; j <= n; j ++ )
 		{
-			if(i == j) f[i][j] = 0;
-			else f[i][j] = INF;
+			if(i != j) d[i][j] = 1e9;
+			else d[i][j] = 0;
 		}
 	}
 	
-	for(int i = 1; i <= n; i ++ )
+	while(m -- )
 	{
-		for(int j = 1; j <= n; j ++ )
-		{
-			if(abs(i - j) <= 21) f[i][j] = i / __gcd(i, j) * j;
-			else continue;
-		}
+		int x, y, z;
+		cin >> x >> y >> z;
+		d[x][y] = min(z, d[x][y]);
 	}
 	
 	floyd();
 	
-	cout << f[1][2021] << endl;
+	while(k -- )
+	{
+		int x, y;
+		cin >> x >> y;
+		if(d[x][y] > 1e9 / 2) puts("impossible");
+		else cout << d[x][y] << endl;
+	}	
 	
 	return 0;
-}
+} 
