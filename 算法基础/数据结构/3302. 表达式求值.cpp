@@ -7,7 +7,7 @@
 using namespace std;
 
 stack<int> num;//存储数字 
-stack<char> op;//存储运算符 
+stack<char> op;//存储运算符
 
 //运算符优先级 
 unordered_map<char, int> pr{{'+', 1}, {'-', 1}, {'*', 2}, {'/', 2}};
