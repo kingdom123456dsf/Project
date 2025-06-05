@@ -1,52 +1,52 @@
 #include<iostream>
+#include<algorithm>
 #include<cstring>
 #include<map>
 
 using namespace std;
 
-int n, m;
 map<string, char> mp;
+int n, m;
 
 int main()
 {
 	cin >> n >> m;
-	string name;
-	char value;
 	while(n -- )
 	{
-		cin >> name >> value;
-		mp[name] = value;
+		string k;
+		char v;
+		cin >> k >> v;
+		mp[k] = v;
 	}
 	
-	string s;
 	while(m -- )
 	{
+		string s;
 		cin >> s;
-		if (mp.find(s) != mp.end())//找一模一样的 
-        {
-            cout << mp[s] << endl;
-        }
-        else//拼接的 
-        {
-            int x = 0;//记录第几个位置开始分割 
-            int cnt = 0;//判断重复 
-            for (int i = 0; i < s.size(); i++)
-            {
-            	//是拼接的 
-                if (mp.find(s.substr(0, i + 1)) != mp.end() && mp.find(s.substr(i + 1)) != mp.end())
-                {
-                    cnt ++ ;
-                    x = i;
-                }
-            }
-            if (!cnt || cnt > 1)//若不是拼接或有重复 
-                cout << "D" << endl;
-            else//符合所有条件 
-            {
-                cout << mp[s.substr(0, x + 1)] << mp[s.substr(x + 1)] << endl;
-            }
-        }
-    }
+		
+		if(mp.find(s) != mp.end())
+		{
+			cout << mp[s] << endl;
+			continue; 
+		}
+		
+		int cnt = 0;
+		int x = 0;
+		for(int i = 0; i < s.size(); i ++ )
+		{
+			if(mp.find(s.substr(0, i)) != mp.end() && mp.find(s.substr(i)) != mp.end())
+			{
+				cnt ++ ;
+				x = i;
+			}
+		}
+		if(!cnt || cnt > 1)
+		{
+			cout << "D" << endl;
+		}
+		else cout << mp[s.substr(0, x)] << mp[s.substr(x)] << endl;
+	}
+	
 	
 	return 0;
 }
