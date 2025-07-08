@@ -2,42 +2,41 @@
 
 using namespace std;
 
-const int N = 25;
-int res[N];
-int p, k;
-int n;
+int a[20];
 
-int check(int x)
+int check(int p)
 {
-	if(x == 1) return 12;
-	if(x == 2) return 9;
-	if(x == 3) return 7;
-	if(x == 4) return 5;
-	if(x == 5) return 4;
-	if(x == 6 || x == 7) return 3;
-	if(x >= 8 && x <= 10) return 2;
-	if(x >= 11 && x <= 15) return 1;
-	if(x >= 16 && x <= 20) return 0;
+	if(p == 1) return 12;
+	else if(p == 2) return 9;
+	else if(p == 3) return 7;
+	else if(p == 4) return 5;
+	else if(p == 5) return 4;
+	else if(p == 6 || p == 7) return 3;
+	else if(p >= 8 && p <= 10) return 2;
+	else if(p >= 11 && p <= 15) return 1;
+	else return 0;
 }
 
 int main()
 {
+	int n;
 	cin >> n;
-
+	
 	while(n -- )
 	{
-		for(int i = 1; i <= 20; i ++ )
+		for(int i = 0; i < 20; i ++ )
 		{
+			int p = 0, k = 0;
 			cin >> p >> k;
-			res[i] += check(p);
-			res[i] += k;
+			int sum = check(p) + k;
+			a[i] += sum;
 		}
 	}
 	
-	for(int i = 1; i <= 20; i ++ )
+	for(int i = 0; i < 20; i ++ )
 	{
-		cout << i << " " << res[i] << endl;
-	}	
+		cout << i + 1 <<" " << a[i] << endl;
+	}
 	
 	return 0;
 }

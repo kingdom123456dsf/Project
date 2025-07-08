@@ -2,27 +2,27 @@
 
 using namespace std;
 
-int n, w;
-int x;
-
 int main()
 {
-	cin >> n >> w;
-	int t = w;//开始的星期
-	int y = 0, c = 0;
-	for(int i = 1; i <= n; i ++ )
+	int n, m;
+	cin >> n >> m;
+	
+	int r1 = 0, r2 = 0;
+	while(n -- )
 	{
+		int x;
 		cin >> x;
 		if(x >= 35)
 		{
-			if(t != 4) y ++;
-			else c ++;
+			if(m != 4) r1 ++ ;
+			else r2 ++ ;
 		}
-		t ++;
-		if(t == 8) t = 1;		
-	} 
+		
+		if(m != 7) m ++ ;
+		else m = 1;
+	}
 	
-	cout << y << " " << c << endl;
+	cout << r1 << " " << r2 << endl; 
 	
 	return 0;
 }
