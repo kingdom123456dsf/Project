@@ -1,3 +1,4 @@
+#include GCC optimize(2)
 #include<iostream>
 #include<algorithm>
 #include<cstring>
@@ -8,13 +9,14 @@ const int N = 5010;
 
 struct work{
     int t, d, p;
+    
+    bool operator<(const work &temp) const
+    {
+    	return d < temp.d;
+	}
 }w[N];
 
-bool cmp(work a, work b)
-{
-    if(a.p != b.p) return a.p > b.p;
-    else return a.d < b.d;
-}
+int f[N][N];//dp状态表示 
 
 int main()
 {
@@ -25,28 +27,33 @@ int main()
     {
     	int n;  // 工作数量
         cin >> n;
-        for(int i = 0; i < n; i ++ )
+        for(int i = 1; i <= n; i ++ )
         {
             int t, d, p;
             cin >> t >> d >> p;
             w[i] = {t, d, p};
         }
         
-        // 按照截止时间排序
-        sort(w, w + n, cmp);
+        //将截止时刻从大到小排序即可 
+        sort(w + 1, w + 1 + n);
         
-		int res = 0;  // 最大报酬
-		int time = 0;
-        for(int i = 0; i < n; i ++ )
+        memset(f, 0, sizeof f);
+
+        for(int i = 1; i <= n; i ++ )
         {
-        	if(time + w[i].t <= w[i].d)
+        	for(int j = w[i].d; j >= w[i].t; j -- )
         	{
-        		res += w[i].p;
-        		time += w[i].t;
+     		 	f[i][j] = max(f[i - 1][j], f[i - 1][j - w[i].t] + w[i].p);
 			}
 		}
-
-        cout << res << endl;
+		
+		int res = 0;
+		for(int j = 1; j <= w[n].d; j ++ )
+		{
+			res = max(f[n][j], res);
+		}
+		cout << res << endl;
+		
     }
     
     return 0;
