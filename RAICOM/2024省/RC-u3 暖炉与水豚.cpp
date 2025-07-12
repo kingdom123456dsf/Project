@@ -1,61 +1,19 @@
 #include<iostream>
-#include<cstring>
 
 using namespace std;
 
 const int N = 1010;
 char g[N][N];
-bool st[N][N];
 int n, m;
 
-//从上开始,偏移量 
-int dx[8] = {-1, -1, 0, 1, 1, 1, 0, -1};
-int dy[8] = {0, 1, 1, 1, 0, -1, -1, -1};
-
-bool check_cold(int a, int b)
+bool find(int x, int y, char c)
 {
-	int x = 0, y = 0;
-	for(int i = 0; i < 8; i ++ )
-	{
-		x = a + dx[i];
-		y = b + dy[i];
-		//偏移后的坐标
-		if(x >= 1 && x <= n && y >= 1 && y <= m)
-		{
-			if(g[x][y] == 'c') return true;//周围有冷，不可选 
-		} 
-	}
-	return false;//无冷,可选 
-}
-
-void check(int a, int b)
-{
-	bool flag = false;
-	int x = 0, y = 0;
-	for(int i = 0; i < 8; i ++ )
-	{
-		x = a + dx[i];
-		y = b + dy[i];
-		//偏移后的坐标
-		if(x >= 1 && x <= n && y >= 1 && y <= m)
-		{
-			if(g[x][y] == 'm') flag = true;//找到暖炉 
-		} 
-	}
-	
-	if(!flag)//没找到暖炉，周围可能藏了暖炉 
-	{
-		for(int i = 0; i < 8; i ++ )
-		{
-			x = a + dx[i];
-			y = b + dy[i];
-			//偏移后的坐标
-			if(x >= 1 && x <= n && y >= 1 && y <= m)
-			{
-				if(g[x][y] == '.' && !check_cold(x, y)) st[x][y] = true;//记录坐标 
-			} 
-		}
-	}
+	//周围8个方向 
+	for(int i = x - 1; i <= x + 1; i ++ )
+		for(int j = y - 1; j <= y + 1; j ++ )	
+			if(i > 0 && i <= n && j > 0 && j <= m)
+				if(g[i][j] == c) return true;
+	return false; 			
 }
 
 int main()
@@ -63,23 +21,23 @@ int main()
 	cin >> n >> m;
 	for(int i = 1; i <= n; i ++ )
 		for(int j = 1; j <= m; j ++ )
-			cin >> g[i][j];
-			
+			cin >> g[i][j];		
+	
+	int cnt = 0;
 	for(int i = 1; i <= n; i ++ )
 		for(int j = 1; j <= m; j ++ )
-			if(g[i][j] == 'w')//暖的 
-				check(i, j);	   
+			if(g[i][j] == 'w')//找到暖水豚
+				if(!find(i, j, 'm'))//没有暖炉	   
+					for(int a = i - 1; a <= i + 1; a ++ )
+						for(int b = j - 1; b <= j + 1; b ++ )
+							if(a > 0 && a <= n && b > 0 && b <= m && g[a][b] == '.')
+								 if(!find(a, b, 'c'))//则空地藏了暖炉
+								 {
+								 	cout << a << " " << b << endl;
+								 	cnt ++ ;
+								 }		
 	
-	bool flag = false;//找到没有藏匿的情况 
-	for(int i = 1; i <= n; i ++ )
-		for(int j = 1; j <= m; j ++ )
-			if(st[i][j])
-			{
-				cout << i << " " << j << endl;	
-				flag = true;
-			}
-	
-	if(!flag) cout << "Too cold!" << endl; 
+	if(!cnt) cout << "Too cold!" << endl;
 	
 	return 0;
 }
